@@ -50,3 +50,5 @@ def run():
 
 if __name__ == '__main__':
     run()
+
+# autor: Bernardo Javier Miranda Tarelo
