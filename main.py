@@ -14,7 +14,7 @@ class Frame():
 
     def open_excel(self):
             file = filedialog.askopenfile(title='Cargar Excel', 
-                                        initialdir=os.path.expanduser('/mnt/c/Users/berna/Documents'), 
+                                        initialdir=os.path.expanduser('~/Documents'), 
                                         filetypes=(('Excel Files', '*.xlsx'),
                                                     ('All files', '*.*')))
             self.label1_str.set(file.name)
@@ -27,8 +27,12 @@ class Frame():
                                         filetypes=(('CSV Files', '*.csv'),
                                                     ('All files', '*.*')))
             self.label2_str.set(file.name)
-            self.csv_file = pd.read_csv(self.label2_str.get())
-            self.label4_str.set(self.get_cols(df=self.csv_file))
+            try:
+                self.csv_file = pd.read_csv(self.label2_str.get())
+                self.label4_str.set(self.get_cols(df=self.csv_file))
+            except UnicodeDecodeError:
+                self.csv_file = pd.read_csv(self.label2_str.get(), encoding='latin1')
+                self.label4_str.set(self.get_cols(df=self.csv_file))
 
     def export_to_csv(self):    
         df = pd.DataFrame(self.excel_file, columns=self.csv_file.columns)
