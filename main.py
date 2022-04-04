@@ -27,7 +27,7 @@ class Frame():
                                         filetypes=(('CSV Files', '*.csv'),
                                                     ('All files', '*.*')))
             self.label2_str.set(file.name)
-            self.csv_file = pd.read_csv(self.label2_str.get(), encoding='iso-8859-1')
+            self.csv_file = pd.read_csv(self.label2_str.get())
             self.label4_str.set(self.get_cols(df=self.csv_file))
 
     def export_to_csv(self):    
