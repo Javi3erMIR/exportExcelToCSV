@@ -14,13 +14,12 @@ class Frame():
 
     def open_excel(self):
             file = filedialog.askopenfile(title='Cargar Excel', 
-                                        initialdir=os.path.expanduser('~/Documents'), 
+                                        initialdir=os.path.expanduser('/mnt/c/Users/berna/Documents'), 
                                         filetypes=(('Excel Files', '*.xlsx'),
                                                     ('All files', '*.*')))
             self.label1_str.set(file.name)
             self.excel_file = pd.read_excel(self.label1_str.get())
-            self.label3_str.set(str(self.excel_file.columns))
-
+            self.label3_str.set(self.get_cols(df=self.excel_file))
 
     def open_csv(self):
             file = filedialog.askopenfile(title='Cargar CSV', 
@@ -29,7 +28,7 @@ class Frame():
                                                     ('All files', '*.*')))
             self.label2_str.set(file.name)
             self.csv_file = pd.read_csv(self.label2_str.get(), encoding='iso-8859-1')
-            self.label4_str.set(str(self.csv_file.columns))
+            self.label4_str.set(self.get_cols(df=self.csv_file))
 
     def export_to_csv(self):    
         df = pd.DataFrame(self.excel_file, columns=self.csv_file.columns)
@@ -43,6 +42,7 @@ class Frame():
         self.label2 = Label(self.window, textvariable=self.label2_str, relief=RAISED)
         self.label3 = Label(self.window, textvariable=self.label3_str, relief=RAISED)
         self.label4 = Label(self.window, textvariable=self.label4_str, relief=RAISED)
+        self.label5 = Label(self.window, text='Columas: ')
         self.boton3 = Button(self.window, text='Exportar a csv', command=self.export_to_csv)
 
 
@@ -50,14 +50,20 @@ class Frame():
         self.window.geometry('1000x300')
         self.boton1.grid(row=1, column=0, sticky='W')
         self.label1.grid(row=1, column=1)
-        self.label3.grid(row=1, column=2)
+        self.label5.grid(row=1, column=2)
+        self.label3.grid(row=1, column=3)
         self.boton2.grid(row=2, column=0, sticky='W')
         self.label2.grid(row=2, column=1)
-        self.label4.grid(row=2, column=2)
+        self.label5.grid(row=2, column=2)
+        self.label4.grid(row=2, column=3)
         self.boton3.grid(row=3, column=0, sticky='W')
         self.window.mainloop()
 
-    
+    def get_cols(self, df: pd.DataFrame):
+        cols = []
+        for col in df.columns:
+            cols.append('{},'.format(col))
+        return cols
 
 if __name__ == '__main__':
     frame = Frame()
