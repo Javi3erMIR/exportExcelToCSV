@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 import os
+from tkinter import messagebox
 import pandas as pd
 
 class Frame():
@@ -23,21 +24,18 @@ class Frame():
 
     def open_csv(self):
             file = filedialog.askopenfile(title='Cargar CSV', 
-                                        initialdir=os.path.expanduser('/mnt/c/Users/berna/Documents'), 
+                                        initialdir=os.path.expanduser('~/Documents'), 
                                         filetypes=(('CSV Files', '*.csv'),
                                                     ('All files', '*.*')))
             self.label2_str.set(file.name)
-            try:
-                self.csv_file = pd.read_csv(self.label2_str.get())
-                self.label4_str.set(self.get_cols(df=self.csv_file))
-            except UnicodeDecodeError:
-                self.csv_file = pd.read_csv(self.label2_str.get(), encoding='latin1')
-                self.label4_str.set(self.get_cols(df=self.csv_file))
+            self.csv_file = pd.read_csv(self.label2_str.get(), encoding='utf-8-sig')
+            self.label4_str.set(self.get_cols(df=self.csv_file))
 
     def export_to_csv(self):    
         df = pd.DataFrame(self.excel_file, columns=self.csv_file.columns)
         file_path = filedialog.asksaveasfilename(defaultextension='.csv')
-        df.to_csv(file_path, index=None)
+        df.to_csv(file_path, index=None, encoding='utf-8-sig')
+        messagebox.showinfo('Info', '¡CSV generado!')
         
     def init_components(self):
         self.boton1 = Button(self.window, text='Cargar Excel', command=self.open_excel)
@@ -52,6 +50,7 @@ class Frame():
 
     def run(self):
         self.window.geometry('1000x300')
+        self.window.title('Exportar a CSV')
         self.boton1.grid(row=1, column=0, sticky='W')
         self.label1.grid(row=1, column=1)
         self.label5.grid(row=1, column=2)
